@@ -15,32 +15,61 @@ model.add()
 //test end
 new SwingBuilder().edt {
 	frame(title:'Calculator', defaultCloseOperation:JFrame.EXIT_ON_CLOSE, size:[275,150], show: true) { // pack:true
-		vbox {
-			hbox{
-				displayField = textField(text: bind(source:model, sourceProperty: "disp"))
+		borderLayout(vgap: 5)
+
+		panel(constraints: BorderLayout.CENTER,
+		border: compoundBorder([emptyBorder(10)])){
+		tableLayout{
+			
+			tr {
+				td(colspan:3){
+					displayField = textField(text: bind(source:model, sourceProperty: "disp"))
+				}
 			}
-			hbox {
-				button(text:'1')
-				button(text:'2')
-				button(text:'3')
+			tr {
+				td {
+					button(text:'1')
+				}
+				td {
+					button(text:'2')
+			    }
+				td {
+					button(text:'3')
+				}
 			}
-			hbox {
-				button(text:'4')
-				button(text:'5')
-				button(text:'6')
+			tr {
+				td {
+					button(text:'4')
+				}
+				td {
+					button(text:'5')
+				}
+				td {
+					button(text:'6')
+				}
 			}
-			hbox {
-				button(text:'7')
-				button(text:'8')
-				button(text:'9')
+			tr {
+				td {
+					button(text:'7')
+				}
+				td {
+					button(text:'8')
+				}
+				td {
+					button(text:'9')
+				}
 			}
-			hbox {
-				button(text:'Close',
-				actionPerformed: {
-					println "Closing window..."
-					System.exit(0)//crude but effective
-				})
+			tr {
+				td(colspan:3){
+					button(text:'Close',
+							actionPerformed: {
+						println "Closing window..."
+						System.exit(0)//crude but effective
+					})
+				}
 			}
 		}
 	}
+		}
+		
 }
