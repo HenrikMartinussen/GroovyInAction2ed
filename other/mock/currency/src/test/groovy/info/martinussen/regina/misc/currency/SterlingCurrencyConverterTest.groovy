@@ -44,9 +44,20 @@ class SterlingCurrencyConverterTest {
 		mockContextClass.use {
 			def dummyService = new DummyExchangeRateService()
 			testConverter = new SterlingCurrencyConverter(dummyService)
-			double convertedAmount = testConverter.convertFromSterling(10.0, Currency.USD)
-			assertEquals(16.71, convertedAmount, 0.001)
+			double convertedAmount = testConverter.convertFromSterling(30.0, Currency.USD)
+			assertEquals(50.13, convertedAmount, 0.001)
 		}
+	}
+	
+	@Test
+	public void testConvertFromSterling4(){
+		//Instance-style MockFor - http://groovy.codehaus.org/Groovy+Mocks
+		def mockContext = new MockFor(ExchangeRateService)
+		mockContext.demand.retrieveRate {new ExchangeRate(1.671, 0.598)}
+		def mockService = mockContext.proxyInstance()
+		testConverter = new SterlingCurrencyConverter(mockService)
+		double convertedAmount = testConverter.convertFromSterling(40, Currency.USD)
+		assertEquals(66.84, convertedAmount, 0.001)
 	}
 
 	@Test
