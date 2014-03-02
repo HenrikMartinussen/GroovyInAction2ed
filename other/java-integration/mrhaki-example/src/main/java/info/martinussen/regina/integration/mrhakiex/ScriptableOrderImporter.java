@@ -11,7 +11,7 @@ import org.codehaus.groovy.control.CompilationFailedException;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 
-public class Receiver{
+public class ScriptableOrderImporter{
 
 	public static void main (String[] args) throws CompilationFailedException, IOException, InstantiationException, IllegalAccessException{
 		final GroovyClassLoader classLoader = new GroovyClassLoader();
