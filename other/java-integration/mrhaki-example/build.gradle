@@ -19,6 +19,11 @@ dependencies {
 }
 
 task runSimple(type: JavaExec, dependsOn: 'classes') {
-    main = 'info.martinussen.regina.integration.mrhakiex.ScriptableOrderImporter'
+    main = 'info.martinussen.regina.integration.mrhakiex.SimpleScriptableOrderImporter'
     classpath configurations.runtime, sourceSets.main.output
+}
+
+task runBasic(type: JavaExec, dependsOn: 'classes') {
+	main = 'info.martinussen.regina.integration.mrhakiex.ScriptableOrderImporter'
+	classpath configurations.runtime, sourceSets.main.output
 }

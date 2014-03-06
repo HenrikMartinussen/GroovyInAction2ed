@@ -5,3 +5,6 @@ depends on groovy-all.jar being on the classpath
 
 
 gradle clean compileJava runSimple
+
+Embedded tests in the groovy script can be run from the project home folder like this: 
+groovy src\main\resources\SampleScript.groovy
