@@ -51,7 +51,7 @@ public class OrderBuilder {
 			orderLine.put("articleNumber", articleNumber);
 			orderLine.put("quantity", quantity.toString());//XXX there are other ways...
 			orderLine.put("lineNumber", lineNumber.toString());
-			orderLines.add(lineNumber, orderLine); //possible already existing orderlines with same linenumber will be lost 
+			orderLines.add(orderLine);  
 			System.out.println("Orderline added");
 			clearOrderLineFields();
 		}
@@ -103,5 +103,9 @@ public class OrderBuilder {
 		if (articleNumber == null) throw new NullPointerException();
 		if (articleNumber.isEmpty()) throw new IllegalArgumentException("cannot use empty string as articlenumber");
 		this.articleNumber = articleNumber;
+	}
+
+	public boolean isInitialized(){
+		return initialized;
 	}
 }
