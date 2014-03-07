@@ -1,26 +1,33 @@
 package info.martinussen.regina.integration.mrhakiex;
 
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyObject;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Map;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyObject;
-
 public class SimpleScriptableOrderImporter{
 
 	public static void main (String[] args) throws CompilationFailedException, IOException, InstantiationException, IllegalAccessException{
+		String scriptFileName = "src/main/resources/SimpleScript.groovy";
+		
 		final GroovyClassLoader classLoader = new GroovyClassLoader();
-		Class groovyClass = classLoader.parseClass(new File("src/main/resources/SimpleScript.groovy"));
+		Class groovyClass = classLoader.parseClass(new File(scriptFileName));
 		GroovyObject groovyObject = (GroovyObject) groovyClass.newInstance();
 		
 		
-		
-		BufferedReader br = new BufferedReader(new FileReader(new File("src/test/resources/transferorder.csv")));
+		String orderFileName = "src/test/resources/transferorder.csv";
+		BufferedReader br = new BufferedReader(new FileReader(new File(orderFileName)));
+		System.out.println(count(orderFileName));
 		String line;
 		int lineCounter = 0;
 		while ((line = br.readLine()) != null) {
@@ -34,7 +41,32 @@ public class SimpleScriptableOrderImporter{
 //		classLoader.close();
 	}
 	
-	private static void printOrderLine(Map orderLine){
+	private static int count(String filename) {
+	    InputStream is  = null; 
+	    Reader r = null;
+	    BufferedReader br = null;
+	    int count = 0;
+	    try{
+	    	String s;
+	    	is = new FileInputStream(filename);
+	    	r = new InputStreamReader(is, "UTF-8");
+	    	br = new BufferedReader(r);
+	    	while ((s = br.readLine()) != null) {
+	            System.out.println(s);
+	            count++;
+	        }
+	    } catch (Exception e) {
+	    	throw new RuntimeException(e);
+	    } finally {
+	    	if (br != null) { try { br.close(); } catch(Throwable t) { /* ensure close happens */ } }
+	        if (r != null) { try { r.close(); } catch(Throwable t) { /* ensure close happens */ } }
+	        if (is != null) { try { is.close(); } catch(Throwable t) { /* ensure close happens */ } }
+	    }
+	    return count;
+	}
+
+	
+	private static void printOrderLine(Map<String, String> orderLine){
 		StringBuilder builder = new StringBuilder();
 		builder.append("OrderLine[");
 		builder.append("OrderNumber:");
