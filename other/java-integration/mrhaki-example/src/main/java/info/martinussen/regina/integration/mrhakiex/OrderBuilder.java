@@ -43,6 +43,9 @@ public class OrderBuilder {
 	}
 	
 	public void addOrderLine(){
+		if (built){
+			throw new IllegalStateException("cannot add OrderLine to an order which has already been built");
+		}
 		if (quantity == null || articleNumber == null || lineNumber == null){
 			throw new IllegalStateException("Orderline fields must be set before calling addOrderLine");
 		}
@@ -69,6 +72,10 @@ public class OrderBuilder {
 		if (orderLines.size() < 1){
 			throw new IllegalStateException("add one or more orderlines before building order");
 		}
+		if (built){
+			throw new IllegalStateException("cannot build an order which has already been built");
+		}
+		
 		built = true;
 		System.out.println("Order " + orderNumber + " built");
 	}
@@ -107,5 +114,9 @@ public class OrderBuilder {
 
 	public boolean isInitialized(){
 		return initialized;
+	}
+
+	public boolean isReady() {
+		return built == true;
 	}
 }

@@ -12,7 +12,7 @@ Map parseLine(num, line) {
 	return returnMap
 }
 
-//Tests can be run from the project home folder like this: groovy src\main\resources\SampleScript.groovy
+//Tests can be run from the project home folder like this: groovy src\main\resources\SimpleScript.groovy
 //test that first line is skipped
 orderline = parseLine(0, 'ordernumber;orderlinenumber;articlenumber;quantity')
 assert orderline.size() == 0
