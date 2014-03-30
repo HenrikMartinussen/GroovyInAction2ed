@@ -1,9 +1,11 @@
-package info.martinussen.regina.integration.mrhakiex;
+package info.martinussen.regina.integration.orderimporter;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 public class OrderBuilder {
 	private String orderNumber = null;
@@ -15,6 +17,7 @@ public class OrderBuilder {
 	private boolean initialized = false;
 	private boolean built = false;
 
+	private static Logger log = Logger.getLogger(OrderBuilder.class);
 	
 	public void setOrderNumber(String orderNumber) {
 		if (initialized){
@@ -23,9 +26,13 @@ public class OrderBuilder {
 		if (built) {
 			throw new IllegalStateException("cannot change orderNumber on an already built order");
 		}
-		if (orderNumber == null || orderNumber.isEmpty()){
-			throw new IllegalArgumentException("OrderNumber cannot be set to null or empty");
+		if (orderNumber == null){
+			throw new NullPointerException("OrderNumber cannot be set to null");
 		}
+		if (orderNumber.isEmpty()){
+			throw new IllegalArgumentException("OrderNumber cannot be set to empty");
+		}
+		log.trace("OrderBuilder.setOrderNumber(" + orderNumber + ")");
 		this.orderNumber = orderNumber;
 	}
 	
@@ -43,10 +50,13 @@ public class OrderBuilder {
 		} 
 		orderLines = new ArrayList<Map<String,String>>();
 		initialized = true;
-		System.out.println("Order " + orderNumber + " initialized");
+		log.debug("OrderBuilder: Order " + orderNumber + " initialized");
 	}
 	
 	public void addOrderLine(){
+		if (!initialized){
+			throw new IllegalStateException("Cannot add OrderLine to an order which has not been initialized - set OrderNumber and call init()");
+		}
 		if (built){
 			throw new IllegalStateException("cannot add OrderLine to an order which has already been built");
 		}
@@ -59,7 +69,7 @@ public class OrderBuilder {
 			orderLine.put("quantity", quantity.toString());//XXX there are other ways...
 			orderLine.put("lineNumber", lineNumber.toString());
 			orderLines.add(orderLine);  
-			System.out.println("Orderline added");
+			log.debug("Orderline added");
 			clearOrderLineFields();
 		}
 	}
@@ -81,7 +91,7 @@ public class OrderBuilder {
 		}
 		
 		built = true;
-		System.out.println("Order " + orderNumber + " built");
+		log.info("Order " + orderNumber + " built");
 	}
 	
 	public void clear(){
