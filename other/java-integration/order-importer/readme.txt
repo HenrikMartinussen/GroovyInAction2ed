@@ -4,7 +4,7 @@ http://stackoverflow.com/questions/5868369/how-to-read-a-large-text-file-line-by
 depends on groovy-all.jar being on the classpath
 
 
-gradle clean compileJava runSimple
+gradle clean build runBasic
 
-Embedded tests in the groovy script can be run from the project home folder like this: 
-groovy src\main\resources\SimpleScript.groovy
+view test report at ./build/reports/tests/index.html
+
