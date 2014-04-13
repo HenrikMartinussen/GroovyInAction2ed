@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-public class OrderBuilder {
+public class OrderBuilderBasicImpl implements OrderBuilder{
 	private String orderNumber = null;
 	private Integer lineNumber = null;
 	private Double quantity = null;
@@ -17,7 +17,7 @@ public class OrderBuilder {
 	private boolean initialized = false;
 	private boolean built = false;
 
-	private static Logger log = Logger.getLogger(OrderBuilder.class);
+	private static Logger log = Logger.getLogger(OrderBuilderBasicImpl.class);
 	
 	public void setOrderNumber(String orderNumber) {
 		if (initialized){

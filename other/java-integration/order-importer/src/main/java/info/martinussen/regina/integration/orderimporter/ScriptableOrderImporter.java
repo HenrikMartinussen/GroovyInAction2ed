@@ -32,7 +32,7 @@ public class ScriptableOrderImporter{
 		final GroovyClassLoader classLoader = new GroovyClassLoader();
 		Class groovyClass = classLoader.parseClass(new File(scriptFileName));
 		GroovyObject groovyObject = (GroovyObject) groovyClass.newInstance();
-		OrderBuilder builder = (OrderBuilder) groovyObject.invokeMethod("importFile", new Object[] {new OrderBuilder(), file});
+		OrderBuilder builder = (OrderBuilder) groovyObject.invokeMethod("importFile", new Object[] {new OrderBuilderImpl(), file});
 		
 		return builder;
 	}

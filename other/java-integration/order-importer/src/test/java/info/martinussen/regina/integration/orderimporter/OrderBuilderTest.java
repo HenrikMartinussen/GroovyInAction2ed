@@ -12,14 +12,14 @@ public class OrderBuilderTest {
 	
 	@Before
 	public void setUp(){
-		testBuilder = new OrderBuilder();
+		testBuilder = new OrderBuilderImpl();
 	}
 	
 	@After
 	public void tearDown() throws Exception {
 		testBuilder = null;
 	}
-
+	
 	@Test 
 	public void testConstructionAndInitialState() {
 		assertNotNull(testBuilder);
@@ -27,58 +27,73 @@ public class OrderBuilderTest {
 		assertFalse(testBuilder.isReady());
 	}
 
-	@Test (expected = IllegalStateException.class)
-	public void testCannotInitializeBeforeSettingOrderNumber() {
+	@Test
+	public void testNoStateChangeAfterSetOrderNumber() {
 		assertNotNull(testBuilder);
-		assertFalse(testBuilder.isInitialized());
-		assertFalse(testBuilder.isReady());
-		testBuilder.init();
-	}
-
-	@Test (expected = IllegalStateException.class)
-	public void testCannotBuildOrderWOOrderlines() {
-		assertFalse(testBuilder.isInitialized());
-		testBuilder.setOrderNumber("4711");
-		assertFalse(testBuilder.isInitialized());
-		testBuilder.init();
-		assertTrue(testBuilder.isInitialized());
-		testBuilder.buildOrder();
-	}
-
-	@Test (expected = IllegalStateException.class)
-	public void testOrderCannotAddIncompleteOrderline() {
-		assertFalse(testBuilder.isInitialized());
-		assertFalse(testBuilder.isReady());
 		testBuilder.setOrderNumber("4711");
 		assertFalse(testBuilder.isInitialized());
 		assertFalse(testBuilder.isReady());
-		testBuilder.init();
-		assertTrue(testBuilder.isInitialized());
-		assertFalse(testBuilder.isReady());
-		testBuilder.setArticleNumber("Art001");
-		testBuilder.addOrderLine();
 	}
 
 	@Test 
-	public void testOrderWOneOrderline() {
-		assertFalse(testBuilder.isInitialized());
-		assertFalse(testBuilder.isReady());
+	public void testStateChangeAfterInit() {
 		testBuilder.setOrderNumber("4711");
-		assertFalse(testBuilder.isInitialized());
-		assertFalse(testBuilder.isReady());
 		testBuilder.init();
 		assertTrue(testBuilder.isInitialized());
 		assertFalse(testBuilder.isReady());
+	}
+
+	@Test 
+	public void testOrderNotReadyAfterAddingOrderLine() {
+		testBuilder.setOrderNumber("4711");
+		testBuilder.init();
 		testBuilder.setLineNumber(1);
 		testBuilder.setArticleNumber("Art001");
 		testBuilder.setQuantity(42.0);
 		testBuilder.addOrderLine();
 		assertFalse(testBuilder.isReady());
+	}
+	
+	@Test 
+	public void testOrderWOneOrderline() {
+		testBuilder.setOrderNumber("4711");
+		testBuilder.init();
+		testBuilder.setLineNumber(1);
+		testBuilder.setArticleNumber("Art001");
+		testBuilder.setQuantity(42.0);
+		testBuilder.addOrderLine();
 		testBuilder.buildOrder();
 		assertTrue(testBuilder.isReady());
 		assertEquals("4711", testBuilder.getOrderNumber());
 		assertEquals(1, testBuilder.getOrderLines().size());
 		assertEquals("42.0", testBuilder.getOrderLines().get(0).get("quantity"));
+		assertEquals("Art001", testBuilder.getOrderLines().get(0).get("articleNumber"));
+	}
+
+	@Test 
+	public void testTwoOrdersWOneOrderlineEach() {
+		testBuilder.setOrderNumber("4711");
+		testBuilder.init();
+		testBuilder.setLineNumber(1);
+		testBuilder.setArticleNumber("Art001");
+		testBuilder.setQuantity(42.0);
+		testBuilder.addOrderLine();
+		testBuilder.buildOrder();
+		assertTrue(testBuilder.isReady());
+		testBuilder.clear();
+		assertFalse(testBuilder.isReady());
+		assertFalse(testBuilder.isInitialized());
+		testBuilder.setOrderNumber("4712");
+		testBuilder.init();
+		testBuilder.setLineNumber(1);
+		testBuilder.setArticleNumber("Art001");
+		testBuilder.setQuantity(17.0);
+		testBuilder.addOrderLine();
+		testBuilder.buildOrder();
+		assertTrue(testBuilder.isReady());
+		assertEquals("4712", testBuilder.getOrderNumber());
+		assertEquals(1, testBuilder.getOrderLines().size());
+		assertEquals("17.0", testBuilder.getOrderLines().get(0).get("quantity"));
 		assertEquals("Art001", testBuilder.getOrderLines().get(0).get("articleNumber"));
 	}
 	
@@ -111,8 +126,28 @@ public class OrderBuilderTest {
 		assertEquals("Art002", testBuilder.getOrderLines().get(1).get("articleNumber"));
 	}
 	
-	@Test (expected = IllegalStateException.class) 
-	public void testCannotAddOrderlineTwice() {
+
+
+	@Test (expected = IllegalStateException.class)
+	public void testCannotInitializeBeforeSettingOrderNumber() {
+		assertNotNull(testBuilder);
+		assertFalse(testBuilder.isInitialized());
+		assertFalse(testBuilder.isReady());
+		testBuilder.init();
+	}
+
+	@Test (expected = IllegalStateException.class)
+	public void testCannotBuildOrderWOOrderlines() {
+		assertFalse(testBuilder.isInitialized());
+		testBuilder.setOrderNumber("4711");
+		assertFalse(testBuilder.isInitialized());
+		testBuilder.init();
+		assertTrue(testBuilder.isInitialized());
+		testBuilder.buildOrder();
+	}
+
+	@Test (expected = IllegalStateException.class)
+	public void testOrderCannotAddIncompleteOrderline() {
 		assertFalse(testBuilder.isInitialized());
 		assertFalse(testBuilder.isReady());
 		testBuilder.setOrderNumber("4711");
@@ -121,6 +156,21 @@ public class OrderBuilderTest {
 		testBuilder.init();
 		assertTrue(testBuilder.isInitialized());
 		assertFalse(testBuilder.isReady());
+		testBuilder.setArticleNumber("Art001");
+		testBuilder.addOrderLine();
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testOrderCannotSetQuantityNegative() {
+		testBuilder.setOrderNumber("4711");
+		testBuilder.init();
+		testBuilder.setQuantity(-42.0);
+	}
+
+	@Test (expected = IllegalStateException.class) 
+	public void testCannotAddOrderlineTwice() {
+		testBuilder.setOrderNumber("4711");
+		testBuilder.init();
 		testBuilder.setLineNumber(1);
 		testBuilder.setArticleNumber("Art001");
 		testBuilder.setQuantity(42.0);
@@ -130,11 +180,8 @@ public class OrderBuilderTest {
 
 	@Test (expected = IllegalStateException.class)
 	public void testCannotBuildOrderTwice() {
-		assertFalse(testBuilder.isInitialized());
 		testBuilder.setOrderNumber("4711");
-		assertFalse(testBuilder.isInitialized());
 		testBuilder.init();
-		assertTrue(testBuilder.isInitialized());
 		testBuilder.setLineNumber(1);
 		testBuilder.setArticleNumber("Art001");
 		testBuilder.setQuantity(42.0);
