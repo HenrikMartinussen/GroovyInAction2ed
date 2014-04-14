@@ -12,7 +12,7 @@ public class OrderBuilderTest {
 	
 	@Before
 	public void setUp(){
-		testBuilder = new OrderBuilderImpl();
+		testBuilder = new OrderBuilderBasicImpl();
 	}
 	
 	@After
