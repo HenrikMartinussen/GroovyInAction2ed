@@ -93,6 +93,7 @@ assert c =~ /\w{2}/            // Exactly 2 occurences of word character
 assert !(c =~ /\w{4}/)         // Exactly 4 occurences of word character
 assert !(c ==~ /\w{3}/)        // Doesn't Match exactly 3 occurences of word character
 assert c ==~ /\s{3}\w{3}\s{3}/ // Matches exactly 3 occurences of whitespace character, followed by exactly 3 occurences of word character, followed by exactly 3 occurences of whitespace character
+assert c ==~ /\s*\w{3}\s*/     // Matches 0 or more whitespace character, followed by exactly 3 occurences of word character, followed by zeror or more occurences of whitespace character
 
 
 print 'OK'
