@@ -22,15 +22,15 @@ assert '.' =~ /./                         //any character
 assert '.' =~ /\./                        //a dot
 
 /* ^ Start of line (or start of document, when in single-line mode) */
+assert 'abc123' =~ /abc/  //Find characters 'abc'
 assert 'abc123' =~ /^abc/ //Find characters 'abc' from start of line
 assert 'abc123' =~ /123/  //Find characters '123'
 assert !('abc123' =~ /^123/) //Can't find characters '123' from start of line
 
 /* $ End of line (or end of document, when in single-line mode) */
-assert 'abc123' =~ /123/
-assert 'abc123' =~ /$123/
-assert !('abc123' =~ /^123/)
-assert 'abc123' =~ /$abc/
+assert 'abc123' =~ /123/     //Find characters '123'
+assert 'abc123' =~ /123$/    //Find characters '123' in the end of the line
+assert !('abc123' =~ /abc$/) //Can't find characters 'abc' in the end of the line
 
 /*
 \d Digit character

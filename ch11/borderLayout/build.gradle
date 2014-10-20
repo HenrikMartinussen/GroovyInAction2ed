@@ -1,0 +1,26 @@
+apply plugin: 'eclipse'
+
+apply plugin: 'groovy'
+
+
+
+repositories {
+    
+	mavenCentral()
+
+}
+
+
+
+dependencies {
+    
+	compile 'org.codehaus.groovy:groovy-all:2.0.5'
+    
+	testCompile 'junit:junit:4.11'
+
+}
+
+task runScript (dependsOn: 'classes', type: JavaExec) {
+    main = 'BorderLayout'
+    classpath = sourceSets.main.runtimeClasspath
+}
