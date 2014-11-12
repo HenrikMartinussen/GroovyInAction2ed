@@ -55,11 +55,22 @@ assert 'abc   123   ,.-' =~ /\d{3}.{6}$/       //Find 3 digit characters, follow
 assert 'abc   123   ,.-' =~ '\\s'              //Find whitespace character
 assert 'abc   123   ,.-' =~ '\\s{3}'           //Find 3 whitespace characters
 assert !('abc   123   ,.-' =~ '\\s{4}')        //Can't find 4 whitespace characters
-assert 'abc   123   ,.-' =~ /.{3}\s{3}\d{3}\s{3}.{3}/ //Find 3 any characters, followed by 3 whitespace characters, followed by 3 digit characters, followed by 3 whitespace characters, followed by 3 any characters
+assert 'abc   123   ,.-' =~ /.{3}\s{3}\d{3}\s{3}.{3}/ 
+                                               //Find 3 any characters, followed by 3 whitespace characters, followed by 3 digit characters, followed by 3 whitespace characters, followed by 3 any characters
+assert !('abc   123   ,.-' =~ /^\s{3}/)        //Can't find 3 whitespace characters in the beginning of the line
+assert !('abc   123   ,.-' =~ /\s{3}$/)        //Can't find 3 whitespace characters in the end of the line
+
+/* \S Any character except whitespace */
+assert 'abc   123   ,.-' =~ '\\S'              //Find non-whitespace character
+assert 'abc   123   ,.-' =~ /\S{3}/            //Find 3 non-whitespace character
+assert !('abc   123   ,.-' =~ '\\S{4}')        //Can't find 4 non-whitespace characters
+assert 'abc   123   ,.-' =~ /\S{3}\s{3}\d{3}\s{3}\S{3}/
+                                               //Find 3 non-whitespace character, followed by 3 whitespace characters, followed by 3 digit characters, followed by 3 whitespace characters, followed by 3 non whitespace characters
+assert 'abc   123   ,.-' =~ /^\S{3}/           //Find 3 non-whitespace character in the beginning of the line   
+assert 'abc   123   ,.-' =~ /\S{3}$/           //Find 3 non-whitespace character in the end of the line
 
 
 /*
-\S Any character except whitespace
 \w Word character
 \W Any character except word characters
 \b Word boundary
