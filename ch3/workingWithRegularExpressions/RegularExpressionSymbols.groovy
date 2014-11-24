@@ -70,9 +70,20 @@ assert 'abc   123   ,.-' =~ /^\S{3}/           //Find 3 non-whitespace character
 assert 'abc   123   ,.-' =~ /\S{3}$/           //Find 3 non-whitespace character in the end of the line
 
 
+/* \w Word character */
+assert 'abc   123   ,.-' =~ '\\w'              //Find word character
+assert 'abc   123   ,.-' =~ /\w{3}/            //Find 3 word characters
+assert !('abc   123   ,.-' =~ /\w{4}/)         //Can't find 4 word characters
+assert 'abc   123   ,.-' =~ /^\w{3}/           //Find 3 word characters in the beginning of the line
+assert 'abc   123   ,.-' =~ /\w{3}\s{3}\d{3}/  //Find 3 word characters, followed by 3 whitespace characters, followed by 3 digit characters
+assert 'abc   123   ,.-' =~ /^\w{3}\s{3}/      //Find 3 word characters, followed by 3 whitespace characters, in the beginning of the line
+
+/* \W Any character except word characters */
+assert 'abc   123   ,.-' =~ '\\W'              //Find non word character
+assert 'abc   123   ,.-' =~ /\W{3}/            //Find 3 non word character
+assert 'abc   123   ,.-' =~ /\w{3}\s{3}\d{3}\s{3}\W{3}/
+                                               //Find 3 word character, 3 whitespace character, 3 digit character, 3 whitespace character, 3 non word character
 /*
-\w Word character
-\W Any character except word characters
 \b Word boundary
 () Grouping
 */
