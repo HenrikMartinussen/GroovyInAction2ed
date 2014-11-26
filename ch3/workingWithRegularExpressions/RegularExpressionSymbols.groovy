@@ -8,7 +8,7 @@ Groovy adds three operators for convenience:
 * The regex match operator ==~
 * The regex pattern operator ~string
 */
-//Table 3.6 Regular Expression symbols (excerpt)
+//Table 3.8 Regular Expression symbols (excerpt)
 
 /* . Any character */
 assert 'abc   123   ,.-' =~ /.{6}/             //Find 6 any characters
@@ -86,6 +86,17 @@ assert 'abc   123   ,.-' =~ /\w{3}\s{3}\d{3}\s{3}\W{3}/
 /*
 \b Word boundary
 () Grouping
+( x | y ) x or y, as in (Groovy|Java|Ruby)
+\1 Backmatch to group one; for example, find doubled characters with (.)\1
+x * Zero or more occurrences of x
+x + One or more occurrences of x
+x ? Zero or one occurrence of x
+x { m , n } At least m and at most n occurrences of x
+x { m } Exactly m occurrences of x
+[a-f] Character class containing the characters a, b, c, d, e, f
+[^a] Character class containing any character except a
+(?is:x) Switches mode when evaluating x; i turns on ignoreCase, s
+means single-line mode
 */
 
 print 'Ok'
