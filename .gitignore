@@ -1,0 +1,23 @@
+*.log*
+
+.classpath
+.project
+.settings
+
+#IntelliJ
+.idea
+*.iml
+
+#Eclipse workspace are not to be version tracked:
+#works for windows:
+**/workspace/*
+
+#Maven build products are not to be version tracked:
+#In windows:
+**/target
+
+#Eclipse build products are not to be version tracked:
+bin
+
+
+
