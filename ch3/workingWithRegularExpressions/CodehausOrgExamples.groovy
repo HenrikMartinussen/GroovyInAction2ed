@@ -2,12 +2,27 @@
 import java.util.regex.Pattern
 import java.util.regex.Matcher
 
+def javaPattern = Pattern.compile("foo")
+assert javaPattern instanceof Pattern
+assert javaPattern.class.name == 'java.util.regex.Pattern'
+def javaMatcher = javaPattern.matcher("foobar")
+assert javaMatcher instanceof Matcher
+assert javaMatcher.class.name == 'java.util.regex.Matcher'
+assert !javaMatcher.matches() //foo (Pattern) doesn't match exactly foobar (Matcher)
+assert javaMatcher.find()     //-but foobar (Matcher) contains foo (Pattern)
+javaMatcher.reset("foo")      //re-use the Matcher  - the Pattern is unchanged
+assert javaMatcher.matches()  //foo (Pattern) matches exactly foo (Pattern)
+
+assert 'abc123,.-'.matches('.*123.*')   //The String.matches method accepts a regex pattern
+assert 'abc123,.-'.matches(/.*\d{3}.*/)
 
 // ~ creates a Pattern from String
 def pattern = ~/foo/
 assert pattern instanceof Pattern
+assert pattern.class.name == 'java.util.regex.Pattern'
 assert pattern.matcher("foo").matches() 
 assert !pattern.matcher("foobar").matches() // matches() must match whole String
+assert pattern.matcher('foobar').find()     // find() accepts partial match
 
 assert "cheesechesse" =~ 'cheese' //String
 assert "cheesechesse" =~ "cheese" //GString
